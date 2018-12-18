@@ -1,21 +1,27 @@
-package com.example.peter.myapplication;
+package com.right.salary.app;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+
+        int otchoice=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
 //delcare stuff in the instance of the app
         final EditText amountNum = (EditText)findViewById(R.id.amountNum);
         final EditText workedNum = (EditText)findViewById(R.id.workedNum);
@@ -29,11 +35,20 @@ public class MainActivity extends AppCompatActivity {
         Button calcBtn = (Button) findViewById(R.id.calcBtn);
         Button clrBtn = (Button) findViewById(R.id.clearBtn);
 
+        final Spinner OTspinner = (Spinner) findViewById(R.id.OTspinner);     //drop down lists are called spinners
+
+        ArrayAdapter<String> otadapter = new ArrayAdapter<String>(MainActivity.this,        //array adapters are arrays that can be molded into other containers...like spinners
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.overtime)); //(context, Resource file, data we need to populate)
+
+        otadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);       //convert normal array list to drop down list (spinner)
+        OTspinner.setAdapter(otadapter);    //have our spinner use the adapter we just made
+        OTspinner.setOnItemSelectedListener(this);
+
         clrBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                amountNum.setText("0.00");
-                workedNum.setText("0.00");
+                amountNum.setText("");
+                workedNum.setText("");
                 hourlyAns.setText("$" + ".00");
                 weeklyAns.setText("$" + ".00");
                 biweeklyAns.setText("$" + ".00");
@@ -46,24 +61,9 @@ public class MainActivity extends AppCompatActivity {
         calcBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-/*
-                EditText amountNum = (EditText)findViewById(R.id.amountNum);
-                EditText workedNum = (EditText)findViewById(R.id.workedNum);
-                TextView hourlyAns = (TextView) findViewById(R.id.hourlyAns);
-                TextView weeklyAns = (TextView) findViewById(R.id.weeklyAns);
-                TextView biweeklyAns = (TextView) findViewById(R.id.biweeklyAns);
-                TextView monthlyAns = (TextView) findViewById(R.id.monthlyAns);
-                TextView quaterlyAns = (TextView) findViewById(R.id.quaterlyAns);
-                TextView annuallyAns = (TextView) findViewById(R.id.annuallyAns);
-                */
 
                 double num1 = 0.0;
                 double num2 = 0.0;
-               /* String string1 = "yeet";
-                string1 = amountNum.getText().toString();
-                String string2 = "yeeet";
-                string2 = workedNum.getText().toString();
-*/
 
                 if(amountNum.getText().length() > 0)        //make sure were not calculating a null string
                     num1 = Double.parseDouble(amountNum.getText().toString());
@@ -74,24 +74,35 @@ public class MainActivity extends AppCompatActivity {
                 else
                     workedNum.setText("0.00");
 
-                double dpweek = 5.0;    //working days per week
                 double wpyear = 52.0;   //working weeks per year
-
-                double num3 = num1 + num2;
 
                 double ans[];           //hold answers in an array
                 ans = new double[6];
-                /*ans[0] = 10;
-                ans[1] = 20;
-                ans[2] = 30;
-                ans[3] = 40;
-                ans[4] = 50;
-                ans[5] = 60;
-*/
+
+                double ottime = 0;
+                double otnum = 0.0;
+
+                String OTtext = OTspinner.getSelectedItem().toString();
+                //Toast.makeText(MainActivity.this ,OTtext, Toast.LENGTH_SHORT).show();
+
+
+
+                //----------------------------------------if OTtext if statement doesn't work yet-----------------------------------//
+                if(OTtext == "Time-and-a-half"){
+                    Toast.makeText(MainActivity.this ,OTtext, Toast.LENGTH_SHORT).show();
+
+                    if(num2 >= 40.0){
+                        ottime = num2 - 40;
+                        num2=40.0;
+                        otnum = num1 * 1.5 * ottime;
+                    }
+                }
+
+
                 //--------------------------------math-----------------------------------//
 
                 ans[0] = num1;                          //hourly
-                ans[1] = num1 * num2;                   //weekly
+                ans[1] = num1 * num2 + otnum;           //weekly
                 ans[2] = ans[1] * 2;                    //biweekly
                 ans[3] = ans[1] * wpyear / 12;          //monthly   technically 4.3333333 weeks per month, not 4
                 ans[4] = ans[3] * 3;                    //quaterly
@@ -109,6 +120,18 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String OTtext = parent.getItemAtPosition(position).toString();
+       // Toast.makeText(parent.getContext(),OTtext, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 }
