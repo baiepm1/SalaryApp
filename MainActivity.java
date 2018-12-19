@@ -15,8 +15,9 @@ import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
-        int otchoice=0;
 
+    String otchoice;
+    int otpos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,15 +83,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 double ottime = 0;
                 double otnum = 0.0;
 
-                String OTtext = OTspinner.getSelectedItem().toString();
+                //String OTtext = OTspinner.getSelectedItem().toString();
                 //Toast.makeText(MainActivity.this ,OTtext, Toast.LENGTH_SHORT).show();
 
-
-
-                //----------------------------------------if OTtext if statement doesn't work yet-----------------------------------//
-                if(OTtext == "Time-and-a-half"){
-                    Toast.makeText(MainActivity.this ,OTtext, Toast.LENGTH_SHORT).show();
-
+                if(otpos == 1)   //otpos = position of spinner. 0=none 1=timeandahalf. if choice = over time, calc for over time
+                {
+                    //Toast.makeText(MainActivity.this ,OTtext, Toast.LENGTH_SHORT).show();
                     if(num2 >= 40.0){
                         ottime = num2 - 40;
                         num2=40.0;
@@ -110,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                 DecimalFormat df2 = new DecimalFormat(".00");   //always prints 2 decimals & auto rounds
 
-                //hourlyAns.setText("$" + df2.format(num1));//test
+                //hourlyAns.setText("" + otpos);//test
                 hourlyAns.setText("$" + df2.format(ans[0]));
                 weeklyAns.setText("$" + df2.format(ans[1]));
                 biweeklyAns.setText("$" + df2.format(ans[2]));
@@ -125,9 +123,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String OTtext = parent.getItemAtPosition(position).toString();
-       // Toast.makeText(parent.getContext(),OTtext, Toast.LENGTH_SHORT).show();
-
+        //String OTtext = parent.getItemAtPosition(position).toString();
+        otchoice = parent.getItemAtPosition(position).toString();
+        otpos = position;
+        // Toast.makeText(parent.getContext(),OTtext, Toast.LENGTH_SHORT).show();
     }
 
     @Override
