@@ -279,7 +279,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -322,7 +322,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -367,7 +367,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -405,16 +405,16 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/overtime"
                     android:layout_width="100dp"
-                    android:layout_height="30dp"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginTop="0dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
@@ -423,8 +423,8 @@
 
                 <Spinner
                     android:id="@+id/OTspinner"
-                    android:layout_width="194dp"
-                    android:layout_height="30dp"
+                    android:layout_width="180dp"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="40dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="0dp"
@@ -439,14 +439,36 @@
                     app:layout_constraintVertical_bias="0.0" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/advanceTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Advanced-"
-                tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="219dp" />
-          
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/statusTxt"
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Filing Status:"
+                    android:textSize="18dp" />
+
+                <Spinner
+                    android:id="@+id/StatusSpinner"
+                    android:layout_width="180dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp" />
+            </LinearLayout>
+
         </LinearLayout>
 
     </ScrollView>
