@@ -16,8 +16,8 @@ import java.text.DecimalFormat;
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
 
-    String otchoice;
-    int otpos;
+    String otchoice, statuschoice;
+    int otpos, statuspos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Button calcBtn = (Button) findViewById(R.id.calcBtn);
         Button clrBtn = (Button) findViewById(R.id.clearBtn);
 
+//spinner for over time setup
         final Spinner OTspinner = (Spinner) findViewById(R.id.OTspinner);     //drop down lists are called spinners
 
         ArrayAdapter<String> otadapter = new ArrayAdapter<String>(MainActivity.this,        //array adapters are arrays that can be molded into other containers...like spinners
@@ -44,6 +45,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         otadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);       //convert normal array list to drop down list (spinner)
         OTspinner.setAdapter(otadapter);    //have our spinner use the adapter we just made
         OTspinner.setOnItemSelectedListener(this);
+//
+
+//spinner for filing status setup
+        final Spinner statusSpinner = (Spinner) findViewById(R.id.StatusSpinner);     //drop down lists are called spinners
+
+        ArrayAdapter<String> statusadapter = new ArrayAdapter<String>(MainActivity.this,        //array adapters are arrays that can be molded into other containers...like spinners
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.status)); //(context, Resource file, data we need to populate)
+
+        statusadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);       //convert normal array list to drop down list (spinner)
+        statusSpinner.setAdapter(statusadapter);    //have our spinner use the adapter we just made
+        statusSpinner.setOnItemSelectedListener(this);
+//
 
         clrBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,8 +76,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onClick(View v) {
 
-                double num1 = 0.0;
-                double num2 = 0.0;
+                double num1 = 0.0;  //num1 -> money per hour
+                double num2 = 0.0;  //num2 -> hours worked in the week
 
                 if(amountNum.getText().length() > 0)        //make sure were not calculating a null string
                     num1 = Double.parseDouble(amountNum.getText().toString());
@@ -80,13 +93,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 double ans[];           //hold answers in an array
                 ans = new double[6];
 
-                double ottime = 0;
-                double otnum = 0.0;
+                double ottime = 0;  //ottime -> amount of overtime hours
+                double otnum = 0.0; //otnum -> overtime pay
 
                 //String OTtext = OTspinner.getSelectedItem().toString();
                 //Toast.makeText(MainActivity.this ,OTtext, Toast.LENGTH_SHORT).show();
 
-                if(otpos == 1)   //otpos = position of spinner. 0=none 1=timeandahalf. if choice = over time, calc for over time
+                if(otpos == 1)   //otpos -> position of spinner. 0=none 1=timeandahalf. if choice = over time, calc for over time
                 {
                     //Toast.makeText(MainActivity.this ,OTtext, Toast.LENGTH_SHORT).show();
                     if(num2 >= 40.0){
@@ -97,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
 
 
-                //--------------------------------math-----------------------------------//
+                //--------------------------------payment math-----------------------------------//
 
                 ans[0] = num1;                          //hourly
                 ans[1] = num1 * num2 + otnum;           //weekly
@@ -105,6 +118,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 ans[3] = ans[1] * wpyear / 12;          //monthly   technically 4.3333333 weeks per month, not 4
                 ans[4] = ans[3] * 3;                    //quaterly
                 ans[5] = ans[4] * 4;                    //annually
+
+                //--------------------------------tax math---------------------------------------//
+
+                //learn more ab federal and state income tax deductions and exemptions
+
+
+
 
                 DecimalFormat df2 = new DecimalFormat(".00");   //always prints 2 decimals & auto rounds
 
@@ -122,11 +142,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        //String OTtext = parent.getItemAtPosition(position).toString();
-        otchoice = parent.getItemAtPosition(position).toString();
-        otpos = position;
-        // Toast.makeText(parent.getContext(),OTtext, Toast.LENGTH_SHORT).show();
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {       //this will run anytime any spinner is changed
+
+        switch(parent.getId()){
+            case R.id.OTspinner:    //only run otspinner is changed
+                //String OTtext = parent.getItemAtPosition(position).toString();
+                otchoice = parent.getItemAtPosition(position).toString();
+                otpos = position;
+                break;
+
+            case R.id.StatusSpinner:    //only run when statusSpinner is changed
+                //String OTtext = parent.getItemAtPosition(position).toString();
+                statuschoice = parent.getItemAtPosition(position).toString();
+                statuspos = position;
+                break;
+        }
+
+        // Toast.makeText(parent.getContext(),statuschoice, Toast.LENGTH_SHORT).show();
     }
 
     @Override
